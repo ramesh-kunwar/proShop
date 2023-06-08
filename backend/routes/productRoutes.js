@@ -5,17 +5,24 @@ import express from "express";
 import {
   getProducts,
   getProductById,
+  createProduct,
+  updateProduct,
   // createProduct,
   // updateProduct,
   // deleteProduct,
   // createProductReview,
   // getTopProducts,
-} from  "../controller/productController.js"
+} from "../controller/productController.js";
 
+import { protect, admin } from "../middleware/authMiddleware.js";
 // const {getProducts}  = require("../controller/productController")
 const router = express.Router();
 
 router.route("/").get(getProducts);
 router.route("/:id").get(getProductById);
+
+// admin route
+router.route("/").post(protect, admin, createProduct);
+router.route("/:id").put(protect, admin, updateProduct);
 
 export default router;

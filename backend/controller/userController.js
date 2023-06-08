@@ -13,21 +13,25 @@ import generateToken from "../utils/generateToken.js";
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(user);
-  if (user && user.matchPassword(password)) {
-    generateToken(res, user._id);
 
-    res.status(200).res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      // user: user,
-    });
-  } else {
+  if (!user) {
     res.status(401);
     throw new Error("Invalid email or password");
   }
+  if (!user.matchPassword(password)) {
+    res.status(401);
+    throw new Error("Invalid emaill or password");
+  }
+
+  generateToken(res, user._id);
+
+  res.status(200).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    // user: user,
+  });
 });
 
 /**

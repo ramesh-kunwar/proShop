@@ -4,11 +4,14 @@ import { Container } from "react-bootstrap";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import "react-toastify/dist/ReactToastify.css";
 const App = () => {
   return (
     <>
-      <Header />;
+      <Header />
+
+      {/* <img src="/uploads/image-1687778631960.jpeg" alt="ad" /> */}
+
       <main className="py-3">
         <Container>
           <Outlet />

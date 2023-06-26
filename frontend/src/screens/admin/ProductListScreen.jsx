@@ -5,17 +5,29 @@ import { FaTimes, FaEdit, FaTrash } from "react-icons/fa";
 import Message from "../../components/Message";
 import {
   useCreateProductMutation,
+  useDeleteProductMutation,
   useGetProductsQuery,
 } from "../../slices/productsApiSlice";
 import Loader from "../../components/Loader";
 import { toast } from "react-toastify";
 const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  console.log(products);
+
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
 
-  const deleteHandler = (id) => {
-    console.log(id);
+  const [deleteProduct, {isLoading: loadingDelete}] = useDeleteProductMutation()
+
+  const deleteHandler = async (id) => {
+    if(window.confirm("Are you sure ?")){
+      try {
+        await deleteProduct(id)
+        refetch()
+      } catch (error) {
+        toast.error(error.data.error)
+      }
+    }
   };
 
   const createProductHandler = async () => {
@@ -63,7 +75,7 @@ const ProductListScreen = () => {
             <tbody>
               {products.map((product) => {
                 return (
-                  <tr key={product._id}>
+                  <tr key={Math.random()}>
                     <td>{product.id}</td>
                     <td>{product.name}</td>
                     <td>{product.price}</td>
